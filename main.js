@@ -2,19 +2,38 @@ const coffeeShop = {
   beans: 40,
 
   drinkRequirements: {
-    latte: 10,
-    americano: 5,
-    doubleShot: 15,
-    frenchPress: 12
+    latte: {beanRequirement: 10, price: 12},
+    americano: {beanRequirement: 5, price: 6},
+    doubleShot: {beanRequirement: 15, price: 17},
+    frenchPress: {beanRequirement: 12, price: 13}
+  },
+
+  money: 100,
+
+  buyBeans: function (numBeans) {
+    let beanCost = 0.5;
+    this.money -= beanCost * numBeans;
+    this.beans += numBeans;
   },
 
   makeDrink: function (drinkType) {
-    // TODO: Finish this method
+    this.beans -= this.drinkRequirements[drinkType].beanRequirement;
+  },
+
+  buyDrink: function (drinkType) {
+    if (!this.drinkRequirements[drinkType]) {
+      return alert("Sorry, we don't make" + drinkType);
+    }
+    if (this.drinkRequirements[drinkType].beanRequirement > this.beans) {
+      return alert("Sorry, we're all out of beans!");
+    }
+    this.money += this.drinkRequirements[drinkType].price;
+    this.makeDrink(drinkType);
   }
 }
-
-coffeeShop.makeDrink("latte"); 
-coffeeShop.makeDrink("americano");
-coffeeShop.makeDrink("filtered"); //should alert/console "Sorry, we don't make filtered"
-coffeeShop.makeDrink("doubleShot");
-coffeeShop.makeDrink("frenchPress"); //should alert/console "Sorry, we're all out of beans"
+coffeeShop.buyBeans(10);
+coffeeShop.buyDrink("latte"); 
+coffeeShop.buyDrink("americano");
+coffeeShop.buyDrink("filtered"); //should alert/console "Sorry, we don't make filtered"
+coffeeShop.buyDrink("doubleShot");
+coffeeShop.buyDrink("frenchPress"); //should alert/console "Sorry, we're all out of beans"
